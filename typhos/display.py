@@ -767,11 +767,14 @@ class TyphosDeviceDisplay(utils.TyphosBase, widgets.TyphosDesignerMixin,
             widget.setObjectName('display_widget')
 
         self._display_widget = widget
-
+        # we should _move_display_to_layout as soon as it is
+        # created. This allow us to speed up since if the
+        # widget is too complex it takes seconds to set it to
+        # the QScrollArea
+        self._move_display_to_layout(self._display_widget)
 
         self._current_template = template
         self._update_children()
-        self._move_display_to_layout(self._display_widget)
         utils.reload_widget_stylesheet(self)
 
     @property

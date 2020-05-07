@@ -158,7 +158,8 @@ def create_suite(devices, cfg=None, fake_devices=False):
         logger.debug("Creating empty TyphosSuite ...")
         suite = typhos.TyphosSuite()
         logger.info("Loading Tools ...")
-        tools = dict(suite.default_tools)
+        # tools = dict(suite.default_tools)
+        tools = {}
         for name, tool in tools.items():
             suite.add_tool(name, tool())
         if devices:
@@ -178,6 +179,21 @@ def typhos_cli(args):
     args = parser.parse_args(args)
     typhos_cli_setup(args)
     if not args.version:
+        import line_profiler
+        import typhos.cache
+        import typhos.display   # done
+        import typhos.panel
+        import typhos.suite
+        import typhos.widgets
+
+        profiler = line_profiler.LineProfiler()
+        profiler.add_module(typhos.display)
+        profiler.add_module(typhos.panel)
+        profiler.add_module(typhos.suite)
+        profiler.add_module(typhos.widgets)
+        profiler.add_module(typhos.cache)
+        profiler.enable()
+
         with typhos.utils.no_device_lazy_load():
             suite = create_suite(args.devices, cfg=args.happi_cfg,
                                  fake_devices=args.fake_device)
@@ -186,6 +202,8 @@ def typhos_cli(args):
             window.setCentralWidget(suite)
             window.show()
             logger.info("Launching application ...")
+            profiler.print_stats(output_unit=1e-3)
+
             QApplication.instance().exec_()
             logger.info("Execution complete!")
             return window

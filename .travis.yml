@@ -1,3 +1,5 @@
+version: ~> 1.0
+os: linux
 dist: xenial
 language: python
 
@@ -11,25 +13,11 @@ addons:
         - libxkbcommon-x11-0
 env:
   global:
-    - OFFICIAL_REPO="pcdshub/typhos"
     - secure: "hBCzCVHaSb43+jT7b+hwjB2Xb0nfJqjoTNA7fVye7f23zgYGTemlCuRJUeAKjnwqKdfuevNklSRabMNnoI2zW3T19VV4KdwrmyA/o0O1tsR3qjvXXARd1MTte37ZM2XTMSs4Nxhea5HpXzy8BQXGFNvkZuGmhgNJCoIgaNv047MM3t8lnBRhJNXWc9OaYhqRQ8zw+beezGMdosV4AgOVTr+6K1aZcUOVDsI3sgib0sPq9zcCnaCsolZgJGb2iXUVrxZ2uNeEhKgKk7FScEgiLanaKiUJLOUeQoG5DczVdtfhDRLfbLk8bc7IfRZtaeVCaTgjvwb2ZW7LTi1rXhoy9jsNzKwROUrwsho8S710N7VYTENIbWqAvR7ZwYuGTdwtQiOXvjPvaYhPByK0XCUi98P65s/JDhwKE7mki4QD7E3aAxBJc0h9tzRjZVpG7k+iZuPHy93CEHwkbZFPGFYrDd29kWpNavsBrEQtRxbUkvjjA9vUKaNXBakm9VIO7MAyYFdj8vx9BovQ35Rw5O0kpF7jwY6pch9fBrVKI+G1iTDs/hOx8Qf8mPsb8pltCar3DRIxXd9nNGmR6seb0BGnA2l8cCcYa6VcnfLZecJnYOLwi0/n8i0d3YK6dN/r0hY2MPNKnwb1Fkr29HnObRrcq9zoPgdNRsl+9Z75JcQBghk="
-
-matrix:
-  include:
-    - name: flake8 linting
-      python: 3.6
-      env: LINT_PYTHON=typhos
-    - python: 3.6
-      env: BUILD_DOCS=1
-    - python: 3.6
-      env: BENCHMARK=1
-    - python: 3.7.3  # # Pinned due to PyQt bug. Remove when PyQt 5.13.1 is available
-    - python: 3.8
+    - DOCTR_VERSIONS_MENU: 1
+    - PYTHON_LINT_OPTIONS="typhos --verbose"
 
 install:
-  - git clone --depth 1 git://github.com/pcdshub/pcds-ci-helpers.git
-  - source pcds-ci-helpers/travis/init.sh
-
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
@@ -74,18 +62,18 @@ script:
       doctr deploy . --built-docs docs/build/html --deploy-branch-name gh-pages
     fi
 
-after_success:
-  - codecov
-  - |
-    if [[ $TRAVIS_PULL_REQUEST == false && $TRAVIS_REPO_SLUG == $OFFICIAL_REPO && $TRAVIS_BRANCH == $TRAVIS_TAG  && $TRAVIS_TAG != '' && $BUILD ]]; then
-      export ANACONDA_API_TOKEN=$CONDA_UPLOAD_TOKEN_TAG
-      anaconda upload bld-dir/linux-64/*.tar.bz2
-    fi
-  - |
-    if [[ $TRAVIS_PULL_REQUEST == false && $TRAVIS_REPO_SLUG == $OFFICIAL_REPO && $TRAVIS_BRANCH == 'master' && $BUILD ]]; then
-      export ANACONDA_API_TOKEN=$CONDA_UPLOAD_TOKEN_DEV
-      anaconda upload bld-dir/linux-64/*.tar.bz2
-    fi
-
 after_failure:
   - cat logs/run_tests_log.txt
+
+stages:
+  - test
+  - name: deploy
+    if: (branch = master OR tag IS present) AND type != pull_request
+
+import:
+  - pcdshub/pcds-ci-helpers:travis/shared_configs/python-linter.yml
+  - pcdshub/pcds-ci-helpers:travis/shared_configs/python-tester.yml
+  - pcdshub/pcds-ci-helpers:travis/shared_configs/docs-build.yml
+  - pcdshub/pcds-ci-helpers:travis/shared_configs/pypi-upload.yml
+  - pcdshub/pcds-ci-helpers:travis/shared_configs/doctr-upload.yml
+  - pcdshub/pcds-ci-helpers:travis/shared_configs/anaconda-upload.yml

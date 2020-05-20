@@ -51,18 +51,6 @@ script:
     fi
   - coverage report -m
 
-  # Build docs
-  - set -e
-  - |
-    if [[ -n "$DOCTR_DEPLOY_ENCRYPTION_KEY_PCDSHUB_TYPHOS" && "$BUILD_DOCS" == "1" ]]; then
-      # Create HTML documentation
-      pushd docs
-      make html
-      popd
-      #Publish docs.
-      doctr deploy . --built-docs docs/build/html --deploy-branch-name gh-pages
-    fi
-
 after_failure:
   - cat logs/run_tests_log.txt
 
@@ -73,9 +61,9 @@ stages:
 
 import:
   - pcdshub/pcds-ci-helpers:travis/shared_configs/python-linter.yml
-  - source: pcdshub/pcds-ci-helpers:travis/shared_configs/python-tester.yml
-    mode: merge
   - pcdshub/pcds-ci-helpers:travis/shared_configs/docs-build.yml
+  - source: pcdshub/pcds-ci-helpers:travis/shared_configs/python-tester.yml
+    mode: deep_merge
   - pcdshub/pcds-ci-helpers:travis/shared_configs/pypi-upload.yml
   - pcdshub/pcds-ci-helpers:travis/shared_configs/doctr-upload.yml
   - pcdshub/pcds-ci-helpers:travis/shared_configs/anaconda-upload.yml

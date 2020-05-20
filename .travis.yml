@@ -62,7 +62,7 @@ stages:
 import:
   - hhslepicka/pcds-ci-helpers:travis/shared_configs/python-linter.yml@adjustments
   - hhslepicka/pcds-ci-helpers:travis/shared_configs/docs-build.yml@adjustments
-  - source: pcdshub/pcds-ci-helpers:travis/shared_configs/python-tester.yml@adjustments
+  - source: hhslepicka/pcds-ci-helpers:travis/shared_configs/python-tester.yml@adjustments
     mode: deep_merge
   - hhslepicka/pcds-ci-helpers:travis/shared_configs/pypi-upload.yml@adjustments
   - hhslepicka/pcds-ci-helpers:travis/shared_configs/doctr-upload.yml@adjustments

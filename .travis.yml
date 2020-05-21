@@ -14,15 +14,14 @@ addons:
 env:
   global:
     - secure: "hBCzCVHaSb43+jT7b+hwjB2Xb0nfJqjoTNA7fVye7f23zgYGTemlCuRJUeAKjnwqKdfuevNklSRabMNnoI2zW3T19VV4KdwrmyA/o0O1tsR3qjvXXARd1MTte37ZM2XTMSs4Nxhea5HpXzy8BQXGFNvkZuGmhgNJCoIgaNv047MM3t8lnBRhJNXWc9OaYhqRQ8zw+beezGMdosV4AgOVTr+6K1aZcUOVDsI3sgib0sPq9zcCnaCsolZgJGb2iXUVrxZ2uNeEhKgKk7FScEgiLanaKiUJLOUeQoG5DczVdtfhDRLfbLk8bc7IfRZtaeVCaTgjvwb2ZW7LTi1rXhoy9jsNzKwROUrwsho8S710N7VYTENIbWqAvR7ZwYuGTdwtQiOXvjPvaYhPByK0XCUi98P65s/JDhwKE7mki4QD7E3aAxBJc0h9tzRjZVpG7k+iZuPHy93CEHwkbZFPGFYrDd29kWpNavsBrEQtRxbUkvjjA9vUKaNXBakm9VIO7MAyYFdj8vx9BovQ35Rw5O0kpF7jwY6pch9fBrVKI+G1iTDs/hOx8Qf8mPsb8pltCar3DRIxXd9nNGmR6seb0BGnA2l8cCcYa6VcnfLZecJnYOLwi0/n8i0d3YK6dN/r0hY2MPNKnwb1Fkr29HnObRrcq9zoPgdNRsl+9Z75JcQBghk="
-    - DOCS_REQUIREMENTS: "dev-requirements.txt"
-    - DOCS_EXTRAS: "PyQt5"
     - DOCTR_VERSIONS_MENU: 1
-    - PYTHON_LINT_OPTIONS: "typhos --verbose"
-    - CONDA_PACKAGE: "typhos"
-    - CONDA_RECIPE_FOLDER: "conda-recipe"
-    - CONDA_ENV_NAME: "typhos-env"
-    - CONDA_EXTRAS: "pip pyqt"
-    - CONDA_REQUIREMENTS: "dev-requirements.txt"
+    - DOCS_REQUIREMENTS="dev-requirements.txt"
+    - PYTHON_LINT_OPTIONS="typhos --verbose"
+    - CONDA_PACKAGE="typhos"
+    - CONDA_RECIPE_FOLDER="conda-recipe"
+    - CONDA_ENV_NAME="typhos-env"
+    - CONDA_EXTRAS="pip pyqt=5"
+    - CONDA_REQUIREMENTS="dev-requirements.txt"
 
 before_script:
   # Run windows manager

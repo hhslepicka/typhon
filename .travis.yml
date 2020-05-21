@@ -17,40 +17,17 @@ env:
     - DOCS_REQUIREMENTS: "dev-requirements.txt"
     - DOCS_EXTRAS: "PyQt5"
     - DOCTR_VERSIONS_MENU: 1
-    - PYTHON_LINT_OPTIONS="typhos --verbose"
-
-install:
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - conda config --set always_yes yes --set changeps1 no
-  - conda install conda-build anaconda-client
-  - conda update -q conda conda-build
-  - conda config --remove channels defaults
-  - conda config --add channels conda-forge
-  # Useful for debugging
-  - conda info -a
-  - conda build -q conda-recipe --python $TRAVIS_PYTHON_VERSION --output-folder bld-dir
-  - conda config --add channels "file://`pwd`/bld-dir"
-  # Manage conda environment
-  - conda create -n typhos-env python=$TRAVIS_PYTHON_VERSION typhos pip pyqt --file dev-requirements.txt
-  - source activate typhos-env
-  # Useful for debugging
-  - conda list
+    - PYTHON_LINT_OPTIONS: "typhos --verbose"
+    - CONDA_PACKAGE: "typhos"
+    - CONDA_RECIPE_FOLDER: "conda-recipe"
+    - CONDA_ENV_NAME: "typhos-env"
+    - CONDA_EXTRAS: "pip pyqt"
+    - CONDA_REQUIREMENTS: "dev-requirements.txt"
 
 before_script:
   # Run windows manager
   - "herbstluftwm &"
   - sleep 1
-
-script:
-  - |
-    if [[ "$BENCHMARK" == "1" ]]; then
-      coverage run run_tests.py --show-capture=no --benchmark-only
-    else
-      coverage run run_tests.py --show-capture=no
-    fi
-  - coverage report -m
 
 after_failure:
   - cat logs/run_tests_log.txt
@@ -63,8 +40,7 @@ stages:
 import:
   - hhslepicka/pcds-ci-helpers:travis/shared_configs/python-linter.yml@adjustments
   - hhslepicka/pcds-ci-helpers:travis/shared_configs/docs-build.yml@adjustments
-  - source: hhslepicka/pcds-ci-helpers:travis/shared_configs/python-tester.yml@adjustments
-    mode: deep_merge
+  - hhslepicka/pcds-ci-helpers:travis/shared_configs/python-tester-conda.yml@adjustments
   - hhslepicka/pcds-ci-helpers:travis/shared_configs/pypi-upload.yml@adjustments
   - hhslepicka/pcds-ci-helpers:travis/shared_configs/doctr-upload.yml@adjustments
   - hhslepicka/pcds-ci-helpers:travis/shared_configs/anaconda-upload.yml@adjustments

@@ -20,7 +20,7 @@ env:
     - CONDA_PACKAGE="typhos"
     - CONDA_RECIPE_FOLDER="conda-recipe"
     - CONDA_ENV_NAME="typhos-env"
-    - CONDA_EXTRAS="pip pyqt=5"
+    - CONDA_EXTRAS="pip pyqt=5 happi"
     - CONDA_REQUIREMENTS="dev-requirements.txt"
 
 before_script:

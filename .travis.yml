@@ -27,7 +27,7 @@ env:
 before_script:
   # Run windows manager
   - "herbstluftwm &"
-  - sleep 1
+  - sleep 2
 
 after_failure:
   - cat logs/run_tests_log.txt

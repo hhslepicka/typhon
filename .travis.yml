@@ -16,7 +16,7 @@ env:
     - BENCHMARK_PYTHON: 3.6
     - BENCHMARK_COMMAND: --benchmark-only
 
-    - PIP_EXTRAS: PyQt5 happi
+    - PIP_EXTRAS: "PyQt5 happi"
 
 jobs:
   allow_failures:

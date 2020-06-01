@@ -39,7 +39,7 @@ about:
   summary: 'Automatic-yet-customizable Graphical User Interface Generation for Ophyd Devices'
   license: SLAC Open
   license_family: OTHER
-  license_file: LICENSE.txt
+  license_file: LICENSE.md
 
 test:
   imports:
